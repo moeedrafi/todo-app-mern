@@ -177,4 +177,31 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   }
 });
 
-export { registerUser, loginUser, logoutUser, refreshAccessToken };
+const getCurrentUser = asyncHandler(async (req, res) => {});
+
+const changeCurrentPassword = asyncHandler(async (req, res) => {});
+
+const updateAccountDetails = asyncHandler(async (req, res) => {
+  /*
+  fullName, email, password, username
+  validate them
+  */
+
+  const { fullName, email } = req.body;
+  if (!fullName || !email) {
+    throw new ApiError(400, "Missing fields");
+  }
+});
+
+const updateUserAvatar = asyncHandler(async (req, res) => {});
+
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  refreshAccessToken,
+  getCurrentUser,
+  changeCurrentPassword,
+  updateAccountDetails,
+  updateUserAvatar,
+};
