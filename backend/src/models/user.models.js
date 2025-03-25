@@ -21,7 +21,7 @@ const userSchema = new Schema(
     },
     fullName: { type: String, required: true, trim: true, index: true },
     avatar: { type: String, required: true },
-    todo: [{ type: Schema.Types.ObjectId, ref: "Todo" }],
+
     password: { type: String, required: [true, "Password is required"] },
     refreshToken: { type: String },
   },
