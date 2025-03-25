@@ -80,4 +80,18 @@ const getTodos = asyncHandler(async (req, res) => {
   );
 });
 
-export { createTodo, deleteTodo, getTodos };
+const updateTodoStatus = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const todo = await Todo.findById(id);
+  if (!todo) {
+    throw new ApiError(404, "Todo not found");
+  }
+
+  todo.isCompleted = !todo.isCompleted;
+  await todo.save();
+
+  res.status(200).json(200, todo, "Updated Successfully");
+});
+
+export { createTodo, deleteTodo, getTodos, updateTodoStatus };
