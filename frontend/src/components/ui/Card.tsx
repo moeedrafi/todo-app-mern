@@ -3,8 +3,8 @@ import { Link } from "react-router";
 interface CardProps {
   header: string;
   subHeading: string;
-  to: string;
-  label: string;
+  to?: string;
+  label?: string;
   children: React.ReactNode;
 }
 
@@ -27,11 +27,13 @@ export const Card = ({
       <div className="mt-5">{children}</div>
 
       {/* Footer */}
-      <div className="w-full text-center font-semibold">
-        <Link to={to} className="hover:underline underline-offset-2">
-          {label}
-        </Link>
-      </div>
+      {to && label && (
+        <div className="w-full text-center font-semibold">
+          <Link to={to} className="hover:underline underline-offset-2">
+            {label}
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
