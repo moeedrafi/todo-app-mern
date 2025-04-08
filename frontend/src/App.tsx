@@ -14,7 +14,7 @@ import { Navbar } from "@/components/Navbar";
 
 const AppLayout = () => {
   const location = useLocation();
-  const hideNavbarRoutes = ["/login", "/register"];
+  const hideNavbarRoutes = ["/register", "/login"];
 
   return (
     <>

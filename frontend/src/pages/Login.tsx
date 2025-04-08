@@ -1,58 +1,77 @@
 import { Link } from "react-router";
-
+import { CardWrapper } from "@/components/CardWrapper";
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
 
 const Login = () => {
+  const form = useForm();
+
   return (
-    <div className="bg-black text-white h-screen w-screen flex items-center justify-center">
-      <div className="bg-[#020024] p-4 rounded-lg w-2/4">
-        <h1 className="text-2xl font-semibold tracking-wider mb-5 text-center">
-          Sign In
-        </h1>
-
-        <div className="flex flex-col gap-3 mb-3">
-          <div className="flex flex-col gap-1">
-            <label htmlFor="email">email</label>
-            <input
-              type="email"
+    <div className="h-screen flex items-center justify-center bg-gradient-to-r from-sky-400 to-blue-600">
+      <CardWrapper
+        header="Login"
+        headerLabel="Welcome Back"
+        backButtonLabel="Don't have an account"
+        backButtonHref="/register"
+      >
+        <Form {...form}>
+          <form className="space-y-6">
+            <FormField
               name="email"
-              placeholder="john@gmail.com"
-              className="p-2 rounded-lg"
-            />
-          </div>
+              render={({ field }) => (
+                <FormItem className="mb-5">
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="email"
+                      placeholder="john@gmail.com"
+                    />
+                  </FormControl>
 
-          <div className="flex flex-col gap-1">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
               name="password"
-              placeholder="********"
-              className="p-2 rounded-lg"
+              render={({ field }) => (
+                <FormItem className="mb-5">
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="password" placeholder="********" />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-        </div>
 
-        <div className="flex flex-col gap-5">
-          <Button variant="link" className="self-end">
-            <Link to="/register" className="text-white text-xs">
-              Forgot your password?
-            </Link>
-          </Button>
+            <Button
+              variant="link"
+              size="sm"
+              asChild
+              className="px-0 mb-3 font-normal text-xs"
+            >
+              <Link to="/reset">Forgot Password?</Link>
+            </Button>
 
-          <Button
-            variant="secondary"
-            className="bg-[#3a31d8] text-white hover:bg-[#0600c2] cursor-pointer"
-          >
-            Sign In
-          </Button>
-
-          <Button variant="link">
-            <Link to="/register" className="text-white text-center text-xs">
-              Create an Account
-            </Link>
-          </Button>
-        </div>
-      </div>
+            <Button type="submit" className="w-full cursor-pointer">
+              Submit
+            </Button>
+          </form>
+        </Form>
+      </CardWrapper>
     </div>
   );
 };
