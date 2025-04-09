@@ -14,7 +14,7 @@ import { verifyJWT } from "../middleware/auth.middleware.js";
 
 const router = Router();
 
-router.route("/register").post(upload.single("avatar"), registerUser);
+router.route("/register").post(registerUser);
 router.route("/login").post(loginUser);
 
 // secure route

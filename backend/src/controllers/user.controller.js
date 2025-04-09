@@ -24,10 +24,8 @@ const generateAccessAndRefreshToken = async (userId) => {
 };
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { fullName, username, email, password } = req.body;
-  if (
-    [fullName, username, email, password].some((field) => field?.trim() === "")
-  ) {
+  const { username, email, password } = req.body;
+  if ([username, email, password].some((field) => field?.trim() === "")) {
     throw new ApiError(400, "All fields are required");
   }
 
@@ -38,22 +36,10 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "User Already exists");
   }
 
-  const avatarLocalPath = req.file?.path;
-  if (!avatarLocalPath) {
-    throw new ApiError(400, "Avatar file is missing");
-  }
-
-  const avatar = await uploadOnCloudinary(avatarLocalPath);
-  if (!avatar.url) {
-    throw new ApiError(400, "error uploading Avatar File");
-  }
-
   const user = await User.create({
-    fullName,
     email,
     username: username.toLowerCase(),
     password,
-    avatar: avatar.url,
   });
 
   const createdUser = await User.findById(user._id).select(
