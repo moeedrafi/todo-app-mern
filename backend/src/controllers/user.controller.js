@@ -169,6 +169,24 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, req.user, "Current User fetched"));
 });
 
+const verifyEmail = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.userId);
+  if (!user) {
+    throw new ApiError(404, "user not found");
+  }
+
+  if (user.isVerified) {
+    throw new ApiError(400, "Already Verified");
+  }
+
+  user.isVerified = true;
+  await user.save();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Email Verified Successfully!"));
+});
+
 const changeCurrentPassword = asyncHandler(async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   const user = await User.findById(req.user?._id);
@@ -235,4 +253,5 @@ export {
   changeCurrentPassword,
   updateAccountDetails,
   updateUserAvatar,
+  verifyEmail,
 };

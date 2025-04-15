@@ -27,3 +27,16 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
     throw new ApiError(401, error?.message || "Invalid access token");
   }
 });
+
+export const verifyEmailToken = asyncHandler(async (req, _, next) => {
+  try {
+    const token = req.query.token || req.body.token;
+    if (!token) throw new ApiError(400, "Missing or invalid token");
+
+    const decoded = jwt.verify(token, process.env.EMAIL_VERIFY_SECRET);
+    req.userId = decoded.userId;
+    next();
+  } catch (error) {
+    throw new ApiError(401, error?.message || "Invalid or expired token");
+  }
+});

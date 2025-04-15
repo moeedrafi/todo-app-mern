@@ -9,8 +9,9 @@ import {
   changeCurrentPassword,
   updateUserAvatar,
   getCurrentUser,
+  verifyEmail,
 } from "../controllers/user.controller.js";
-import { verifyJWT } from "../middleware/auth.middleware.js";
+import { verifyEmailToken, verifyJWT } from "../middleware/auth.middleware.js";
 
 const router = Router();
 
@@ -20,6 +21,7 @@ router.route("/login").post(loginUser);
 // secure route
 router.route("/logout").post(verifyJWT, logoutUser);
 router.route("/refresh-user").post(refreshAccessToken);
+router.route("/verify-email").post(verifyEmailToken, verifyEmail);
 
 router.route("/current-user").get(verifyJWT, getCurrentUser);
 
