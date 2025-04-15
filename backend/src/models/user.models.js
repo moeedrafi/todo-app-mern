@@ -19,6 +19,10 @@ const userSchema = new Schema(
       lowercase: true,
       trim: true,
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
     avatar: { type: String },
     password: { type: String, required: [true, "Password is required"] },
     refreshToken: { type: String },

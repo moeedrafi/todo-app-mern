@@ -2,13 +2,14 @@ export type TabsType = "All" | "Completed" | "Pending";
 
 export type AuthContextType = {
   user: User | null;
+  isLoading: boolean;
   isLoggedIn: boolean;
   accessToken: string | null;
-  isAuthenticated: boolean;
+  isVerified: boolean;
   setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsVerified: React.Dispatch<React.SetStateAction<boolean>>;
   login: (credentials: { email: string; password: string }) => Promise<void>;
   register: (data: {
     email: string;

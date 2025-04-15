@@ -7,11 +7,13 @@ const API = axios.create({
 });
 
 API.interceptors.request.use(
-  async (config) => {
+  (config) => {
     const token = getAccessToken();
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    } else {
+      delete API.defaults.headers.common["Authorization"];
     }
 
     return config;

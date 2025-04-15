@@ -9,24 +9,34 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isVerified, setIsVerified] = useState<boolean>(false);
 
   const register = async () => {};
 
   const login = async (credentials: { email: string; password: string }) => {
-    const response: AxiosResponse<AuthResponse> = await API.post(
-      "/api/v1/users/login",
-      credentials
-    );
+    setIsLoading(true);
 
-    const { accessToken, user } = response.data;
+    try {
+      const response: AxiosResponse<AuthResponse> = await API.post(
+        "/api/v1/users/login",
+        credentials
+      );
 
-    setAccessToken(accessToken);
-    setGlobalToken(accessToken);
-    setUser(user);
-    setIsLoggedIn(true);
+      const { accessToken, user } = response.data;
+
+      setAccessToken(accessToken);
+      setGlobalToken(accessToken);
+      setUser(user);
+      setIsLoggedIn(true);
+      setIsLoading(false);
+    } catch (error) {
+      console.log("Login failed", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const logout = async () => {};
@@ -35,13 +45,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const value = {
     user,
+    isLoading,
     accessToken,
     setAccessToken,
     setUser,
     isLoggedIn,
     setIsLoggedIn,
-    isAuthenticated,
-    setIsAuthenticated,
+    isVerified,
+    setIsVerified,
     register,
     login,
     logout,
