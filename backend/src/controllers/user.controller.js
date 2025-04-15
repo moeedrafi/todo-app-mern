@@ -49,9 +49,18 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(500, "Something went wrong while registering!");
   }
 
+  const verificationToken = user.generateEmailVerificationToken();
+  // TODO: send verification mail
+
   return res
     .status(201)
-    .json(new ApiResponse(200, createdUser, "User Registered Successfully"));
+    .json(
+      new ApiResponse(
+        200,
+        createdUser,
+        "User Registered. Please Verify your mail"
+      )
+    );
 });
 
 const loginUser = asyncHandler(async (req, res) => {

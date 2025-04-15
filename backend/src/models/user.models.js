@@ -63,4 +63,10 @@ userSchema.methods.generateRefreshToken = function () {
   );
 };
 
+userSchema.methods.generateEmailVerificationToken = function () {
+  return jwt.sign({ userId: this._id }, process.env.EMAIL_VeriFY_SECRET, {
+    expiresIn: process.env.EMAIL_VeriFY_EXPIRY,
+  });
+};
+
 export const User = mongoose.model("User", userSchema);
