@@ -14,7 +14,32 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isVerified, setIsVerified] = useState<boolean>(false);
 
-  const register = async () => {};
+  const register = async (data: {
+    email: string;
+    password: string;
+    username: string;
+  }) => {
+    setIsLoading(true);
+
+    try {
+      const response: AxiosResponse<AuthResponse> = await API.post(
+        "/api/v1/users/register",
+        data
+      );
+
+      const { accessToken, user } = response.data;
+
+      setAccessToken(accessToken);
+      setGlobalToken(accessToken);
+      setUser(user);
+      setIsLoggedIn(true);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const login = async (credentials: { email: string; password: string }) => {
     setIsLoading(true);
