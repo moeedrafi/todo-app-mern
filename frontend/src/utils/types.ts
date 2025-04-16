@@ -1,3 +1,6 @@
+import { z } from "zod";
+import { registerSchema } from "@/utils/schemas/authSchema";
+
 export type TabsType = "All" | "Completed" | "Pending";
 
 export type AuthContextType = {
@@ -30,3 +33,5 @@ export type FormState = {
   success?: string;
   error?: string;
 };
+
+export type RegisterSchemaType = z.infer<typeof registerSchema>;

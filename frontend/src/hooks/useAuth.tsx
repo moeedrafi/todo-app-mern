@@ -2,8 +2,9 @@ import { AxiosError, AxiosResponse } from "axios";
 import { useContext, useState, createContext } from "react";
 
 import API from "@/utils/api";
-import { AuthContextType, AuthResponse, FormState, User } from "@/utils/types";
+import { registerSchema } from "@/utils/schemas/authSchema";
 import { setAccessToken as setGlobalToken } from "@/utils/tokenManager";
+import { AuthContextType, AuthResponse, FormState, User } from "@/utils/types";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -19,29 +20,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     _: FormState,
     formData: FormData
   ): Promise<FormState> => {
-    const email = formData.get("email") as string;
-    const username = formData.get("username") as string;
-    const password = formData.get("password") as string;
+    const rawData = {
+      email: formData.get("email"),
+      username: formData.get("username"),
+      password: formData.get("password"),
+    };
 
-    if (!email) {
-      return { error: "Email required" };
+    const result = registerSchema.safeParse(rawData);
+    if (!result.success) {
+      return { error: result.error.message };
     }
 
-    if (!username) {
-      return { error: "username required" };
-    }
-
-    if (!password) {
-      return { error: "Password req" };
-    }
-
-    if (password.length < 8) {
-      return { error: "Password must be at least 8 characters." };
-    }
-
-    if (username.length < 2) {
-      return { error: "Username must be at least 2 characters." };
-    }
+    const { email, password, username } = result.data;
 
     try {
       const response: AxiosResponse<AuthResponse> = await API.post(
