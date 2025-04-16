@@ -2,7 +2,6 @@ export type TabsType = "All" | "Completed" | "Pending";
 
 export type AuthContextType = {
   user: User | null;
-  isLoading: boolean;
   isLoggedIn: boolean;
   accessToken: string | null;
   isVerified: boolean;
@@ -11,11 +10,7 @@ export type AuthContextType = {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   setIsVerified: React.Dispatch<React.SetStateAction<boolean>>;
   login: (credentials: { email: string; password: string }) => Promise<void>;
-  register: (data: {
-    email: string;
-    password: string;
-    username: string;
-  }) => Promise<void>;
+  register: (prevState: FormState, formData: FormData) => Promise<FormState>;
   logout: () => void;
   checkAuth: () => void;
 };
@@ -29,4 +24,9 @@ export type User = {
   email: string;
   username: string;
   avatar: string;
+};
+
+export type FormState = {
+  success?: string;
+  error?: string;
 };

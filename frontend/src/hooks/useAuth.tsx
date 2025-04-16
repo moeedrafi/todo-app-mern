@@ -1,30 +1,52 @@
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useContext, useState, createContext } from "react";
 
 import API from "@/utils/api";
-import { AuthContextType, AuthResponse, User } from "@/utils/types";
+import { AuthContextType, AuthResponse, FormState, User } from "@/utils/types";
 import { setAccessToken as setGlobalToken } from "@/utils/tokenManager";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isVerified, setIsVerified] = useState<boolean>(false);
 
-  const register = async (data: {
-    email: string;
-    password: string;
-    username: string;
-  }) => {
-    setIsLoading(true);
+  const register = async (
+    _: FormState,
+    formData: FormData
+  ): Promise<FormState> => {
+    const email = formData.get("email") as string;
+    const username = formData.get("username") as string;
+    const password = formData.get("password") as string;
+
+    if (!email) {
+      return { error: "Email required" };
+    }
+
+    if (!username) {
+      return { error: "username required" };
+    }
+
+    if (!password) {
+      return { error: "Password req" };
+    }
+
+    if (password.length < 8) {
+      return { error: "Password must be at least 8 characters." };
+    }
+
+    if (username.length < 2) {
+      return { error: "Username must be at least 2 characters." };
+    }
 
     try {
       const response: AxiosResponse<AuthResponse> = await API.post(
         "/api/v1/users/register",
-        data
+        { email, username, password }
       );
 
       const { accessToken, user } = response.data;
@@ -33,17 +55,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setGlobalToken(accessToken);
       setUser(user);
       setIsLoggedIn(true);
-      setIsLoading(false);
+
+      return { success: "Registration successful!" };
     } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
+      const err = error as AxiosError<{ message: string }>;
+      return { error: err?.response?.data?.message || "Something went wrong." };
     }
   };
 
   const login = async (credentials: { email: string; password: string }) => {
-    setIsLoading(true);
-
     try {
       const response: AxiosResponse<AuthResponse> = await API.post(
         "/api/v1/users/login",
@@ -56,11 +76,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setGlobalToken(accessToken);
       setUser(user);
       setIsLoggedIn(true);
-      setIsLoading(false);
     } catch (error) {
       console.log("Login failed", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -70,7 +87,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const value = {
     user,
-    isLoading,
     accessToken,
     setAccessToken,
     setUser,
