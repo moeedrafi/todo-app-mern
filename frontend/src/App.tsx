@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import { Route, Routes, useLocation } from "react-router";
 
 import Home from "@/pages/Home";
@@ -30,6 +31,8 @@ const App = () => {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+
+      <Toaster position="top-right" />
     </div>
   );
 };
