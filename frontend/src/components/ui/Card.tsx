@@ -16,24 +16,33 @@ export const Card = ({
   to,
 }: CardProps) => {
   return (
-    <div className="bg-white p-4 rounded-lg w-[400px] shadow-md">
+    <section
+      aria-labelledby="form-title"
+      className="bg-white p-4 rounded-lg w-[400px] shadow-md"
+    >
       {/* Header */}
-      <div className="w-full flex flex-col gap-y-3 items-center justify-center">
-        <h1 className="text-3xl font-semibold">🔐 {header}</h1>
+      <header className="w-full flex flex-col gap-y-3 items-center justify-center">
+        <h1 id="form-title" className="text-3xl font-semibold">
+          🔐 {header}
+        </h1>
         <p className="text-gray-600 text-sm">{subHeading}</p>
-      </div>
+      </header>
 
       {/* Content */}
       <div className="mt-5">{children}</div>
 
       {/* Footer */}
       {to && label && (
-        <div className="w-full text-center font-semibold">
-          <Link to={to} className="hover:underline underline-offset-2">
+        <footer className="w-full text-center font-semibold">
+          <Link
+            aria-label={`Go to ${label}`}
+            to={to}
+            className="hover:underline underline-offset-2"
+          >
             {label}
           </Link>
-        </div>
+        </footer>
       )}
-    </div>
+    </section>
   );
 };
