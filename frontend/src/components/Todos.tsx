@@ -7,14 +7,13 @@ interface TodosProps {
 
 export const Todos = ({ isActiveTab }: TodosProps) => {
   return (
-    <>
-      {isActiveTab === "All" ? (
-        <Todo isActiveTab={isActiveTab} />
-      ) : isActiveTab === "Pending" ? (
-        <Todo isActiveTab={isActiveTab} />
-      ) : (
-        <Todo isActiveTab={isActiveTab} />
-      )}
-    </>
+    <div
+      role="tabpanel"
+      className="mt-6"
+      id={`panel-${isActiveTab.toLowerCase()}`}
+      aria-labelledby={`tab-${isActiveTab.toLowerCase()}`}
+    >
+      <Todo isActiveTab={isActiveTab} />
+    </div>
   );
 };
