@@ -8,15 +8,15 @@ import { Card } from "@/components/ui/Card";
 const EmailVerify = () => {
   const { verifyEmail } = useAuth();
   const [searchParams] = useSearchParams();
-  const [loading, setLoading] = useState(false);
   const token = searchParams.get("token") as string;
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (token) {
-      setLoading(true);
+      setIsLoading(true);
       verifyEmail(token)
         .then((response) => {
-          setLoading(false);
+          setIsLoading(false);
           if (response.success) {
             toast.success("Your email is successfully verified!");
           } else {
@@ -24,7 +24,7 @@ const EmailVerify = () => {
           }
         })
         .catch((error) => {
-          setLoading(false);
+          setIsLoading(false);
           toast.error(error || "Something went wrong.");
         });
     }
@@ -36,7 +36,7 @@ const EmailVerify = () => {
         header="Verify Email"
         subHeading="Enter the code in your email to verify"
       >
-        {loading && <p>Verifying...</p>}
+        {isLoading && <p>Verifying...</p>}
       </Card>
     </div>
   );
