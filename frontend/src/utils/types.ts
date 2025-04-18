@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { registerSchema } from "@/utils/schemas/authSchema";
+import { loginSchema, registerSchema } from "@/utils/schemas/authSchema";
 
 export type TabsType = "All" | "Completed" | "Pending";
 
@@ -12,21 +12,33 @@ export type AuthContextType = {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   setIsVerified: React.Dispatch<React.SetStateAction<boolean>>;
-  login: (credentials: { email: string; password: string }) => Promise<void>;
+  login: (prevState: FormState, formData: FormData) => Promise<FormState>;
   register: (prevState: FormState, formData: FormData) => Promise<FormState>;
   logout: () => void;
   checkAuth: () => void;
 };
 
-export type AuthResponse = {
-  accessToken: string;
-  user: User;
+export type RegisterResponse = {
+  data: User;
+  message: string;
+};
+
+export type LoginResponse = {
+  data: {
+    user: User;
+    accessToken: string;
+  };
+  message: string;
 };
 
 export type User = {
-  email: string;
+  _id: string;
   username: string;
+  email: string;
   avatar: string;
+  isVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type FormState = {
@@ -35,3 +47,4 @@ export type FormState = {
 };
 
 export type RegisterSchemaType = z.infer<typeof registerSchema>;
+export type LoginSchemaType = z.infer<typeof loginSchema>;

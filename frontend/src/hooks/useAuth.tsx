@@ -2,9 +2,15 @@ import { AxiosError, AxiosResponse } from "axios";
 import { useContext, useState, createContext } from "react";
 
 import API from "@/utils/api";
-import { registerSchema } from "@/utils/schemas/authSchema";
+import { loginSchema, registerSchema } from "@/utils/schemas/authSchema";
 import { setAccessToken as setGlobalToken } from "@/utils/tokenManager";
-import { AuthContextType, AuthResponse, FormState, User } from "@/utils/types";
+import {
+  AuthContextType,
+  FormState,
+  LoginResponse,
+  RegisterResponse,
+  User,
+} from "@/utils/types";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -34,40 +40,59 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     const { email, password, username } = result.data;
 
     try {
-      const response: AxiosResponse<AuthResponse> = await API.post(
+      const response: AxiosResponse<RegisterResponse> = await API.post(
         "/api/v1/users/register",
         { email, username, password }
       );
 
-      const { accessToken, user } = response.data;
+      const { message, data } = response.data;
 
-      setAccessToken(accessToken);
-      setGlobalToken(accessToken);
-      setUser(user);
+      setUser(data);
       setIsLoggedIn(true);
 
-      return { success: "Registration successful!" };
+      return { success: message };
     } catch (error) {
       const err = error as AxiosError<{ message: string }>;
       return { error: err?.response?.data?.message || "Something went wrong." };
     }
   };
 
-  const login = async (credentials: { email: string; password: string }) => {
+  const login = async (
+    _: FormState,
+    formData: FormData
+  ): Promise<FormState> => {
+    const rawData = {
+      email: formData.get("email"),
+      password: formData.get("password"),
+    };
+
+    const validatedFields = loginSchema.safeParse(rawData);
+    if (!validatedFields.success) {
+      return { error: "All Fields are required" };
+    }
+
+    const { email, password } = validatedFields.data;
+
     try {
-      const response: AxiosResponse<AuthResponse> = await API.post(
+      const response: AxiosResponse<LoginResponse> = await API.post(
         "/api/v1/users/login",
-        credentials
+        { email, password }
       );
 
-      const { accessToken, user } = response.data;
+      const {
+        message,
+        data: { user, accessToken },
+      } = response.data;
 
       setAccessToken(accessToken);
       setGlobalToken(accessToken);
       setUser(user);
       setIsLoggedIn(true);
+
+      return { success: message };
     } catch (error) {
-      console.log("Login failed", error);
+      const err = error as AxiosError<{ message: string }>;
+      return { error: err?.response?.data?.message || "Something went wrong." };
     }
   };
 
