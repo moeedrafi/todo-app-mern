@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.models.js";
 import { ApiError } from "../utils/ApiError.js";
+import { transporter } from "../utils/nodemailer.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { deleteOnCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js";
@@ -50,7 +51,19 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   const verificationToken = user.generateEmailVerificationToken();
-  // TODO: send verification mail
+
+  const mailOptions = {
+    from: process.env.SENDER_EMAIL,
+    to: user.email,
+    subject: "Welcome! Verify now its a order",
+    html: `
+          <p>Welcome! Please verify your email by clicking the link below:</p>
+            <a href="http://localhost:5173/email-verify?token=${verificationToken}">
+            Verify your email
+            </a>
+          `,
+  };
+  await transporter.sendMail(mailOptions);
 
   return res
     .status(201)
