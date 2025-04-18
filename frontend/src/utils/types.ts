@@ -14,6 +14,7 @@ export type AuthContextType = {
   setIsVerified: React.Dispatch<React.SetStateAction<boolean>>;
   login: (prevState: FormState, formData: FormData) => Promise<FormState>;
   register: (prevState: FormState, formData: FormData) => Promise<FormState>;
+  verifyEmail: (token: string) => Promise<FormState>;
   logout: () => void;
   checkAuth: () => void;
 };

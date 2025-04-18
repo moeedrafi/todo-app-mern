@@ -96,6 +96,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const verifyEmail = async (token: string): Promise<FormState> => {
+    if (!token) {
+      return { error: "Token is Expired" };
+    }
+
+    try {
+      const response = await API.post("/api/v1/users/verify-email", { token });
+
+      return { success: response.data.message };
+    } catch (error) {
+      const err = error as AxiosError<{ message: string }>;
+      return { error: err?.response?.data?.message || "Something went wrong." };
+    }
+  };
+
   const logout = async () => {};
 
   const checkAuth = async () => {};
@@ -111,6 +126,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsVerified,
     register,
     login,
+    verifyEmail,
     logout,
     checkAuth,
   };
