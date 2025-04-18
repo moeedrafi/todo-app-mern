@@ -8,7 +8,7 @@ import NotFound from "@/pages/NotFound";
 import EmailVerify from "@/pages/EmailVerify";
 import ResetPassword from "@/pages/ResetPassword";
 
-import { Navbar } from "@/components/Navbar";
+import { Navbar } from "@/components/navbar/Navbar";
 
 const App = () => {
   const hideNavbarRoutes = [
