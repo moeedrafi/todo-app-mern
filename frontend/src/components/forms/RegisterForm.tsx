@@ -98,16 +98,6 @@ export const RegisterForm = () => {
             {registerState.error}
           </p>
         )}
-        {registerState.success && (
-          <p
-            role="status"
-            aria-live="polite"
-            className="p-2 rounded-lg bg-green-200 text-green-500"
-            tabIndex={-1}
-          >
-            {registerState.success}
-          </p>
-        )}
 
         <button
           type="submit"
