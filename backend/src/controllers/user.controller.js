@@ -209,6 +209,38 @@ const verifyEmail = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "Email Verified Successfully!"));
 });
 
+const resetPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    throw new ApiError(400, "Email is required");
+  }
+
+  const existingUser = await User.findOne({ email });
+  if (!existingUser) {
+    throw new ApiError(404, "User with that email does not exists");
+  }
+
+  const resetToken = existingUser.generateResetPasswordToken();
+
+  const mailOptions = {
+    from: process.env.SENDER_EMAIL,
+    to: email,
+    subject: "Reset your Password",
+    html: `
+          <p>You requested a password reset. Click the link below to reset your password:</p>
+          <a href="http://localhost:5173/reset-password?token=${resetToken}">
+            Reset your password
+          </a>
+          <p>This link will expire in 15 minutes.</p>
+          `,
+  };
+  await transporter.sendMail(mailOptions);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Reset password email sent Successfully!"));
+});
+
 const changeCurrentPassword = asyncHandler(async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   const user = await User.findById(req.user?._id);
@@ -272,6 +304,7 @@ export {
   logoutUser,
   refreshAccessToken,
   getCurrentUser,
+  resetPassword,
   changeCurrentPassword,
   updateAccountDetails,
   updateUserAvatar,

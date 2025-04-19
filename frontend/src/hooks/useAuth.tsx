@@ -9,6 +9,7 @@ import {
   FormState,
   LoginResponse,
   RegisterResponse,
+  Response,
   User,
 } from "@/utils/types";
 
@@ -111,6 +112,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const forgotPassword = async (
+    _: FormState,
+    formData: FormData
+  ): Promise<FormState> => {
+    const email = formData.get("email");
+    if (!email) {
+      return { error: "Email is Required" };
+    }
+
+    try {
+      const response: AxiosResponse<Response> = await API.post(
+        "/api/v1/users/forgot-password",
+        { email }
+      );
+
+      return { success: response.data.message };
+    } catch (error) {
+      const err = error as AxiosError<{ message: string }>;
+      return { error: err?.response?.data?.message || "Something went wrong." };
+    }
+  };
+
   const logout = async () => {};
 
   const checkAuth = async () => {};
@@ -129,6 +152,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     verifyEmail,
     logout,
     checkAuth,
+    forgotPassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

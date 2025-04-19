@@ -15,6 +15,10 @@ export type AuthContextType = {
   login: (prevState: FormState, formData: FormData) => Promise<FormState>;
   register: (prevState: FormState, formData: FormData) => Promise<FormState>;
   verifyEmail: (token: string) => Promise<FormState>;
+  forgotPassword: (
+    prevState: FormState,
+    formData: FormData
+  ) => Promise<FormState>;
   logout: () => void;
   checkAuth: () => void;
 };
@@ -29,6 +33,10 @@ export type LoginResponse = {
     user: User;
     accessToken: string;
   };
+  message: string;
+};
+
+export type Response = {
   message: string;
 };
 

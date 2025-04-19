@@ -69,4 +69,10 @@ userSchema.methods.generateEmailVerificationToken = function () {
   });
 };
 
+userSchema.methods.generateResetPasswordToken = function () {
+  return jwt.sign({ userId: this._id }, process.env.RESET_PASSWORD_SECRET, {
+    expiresIn: process.env.RESET_PASSWORD_EXPIRY,
+  });
+};
+
 export const User = mongoose.model("User", userSchema);

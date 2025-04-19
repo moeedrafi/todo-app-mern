@@ -10,6 +10,7 @@ import {
   updateUserAvatar,
   getCurrentUser,
   verifyEmail,
+  resetPassword,
 } from "../controllers/user.controller.js";
 import { verifyEmailToken, verifyJWT } from "../middleware/auth.middleware.js";
 
@@ -25,6 +26,7 @@ router.route("/verify-email").post(verifyEmailToken, verifyEmail);
 
 router.route("/current-user").get(verifyJWT, getCurrentUser);
 
+router.route("/forgot-password").patch(resetPassword);
 router.route("/change-password").patch(verifyJWT, changeCurrentPassword);
 router.route("/update-account").patch(verifyJWT, updateAccountDetails);
 router
