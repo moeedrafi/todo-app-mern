@@ -41,7 +41,7 @@ export const useRegister = () => {
   useEffect(() => {
     if (registerState?.success) {
       toast.success(registerState.success);
-      navigate("/email-verify");
+      navigate("/login");
     }
   }, [registerState, navigate]);
 
