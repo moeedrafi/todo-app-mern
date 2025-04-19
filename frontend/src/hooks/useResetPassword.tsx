@@ -5,20 +5,20 @@ import { useAuth } from "@/hooks/useAuth";
 import { initialState } from "@/utils/constants";
 
 export const useResetPassword = () => {
-  const { forgotPassword } = useAuth();
+  const { resetPassword } = useAuth();
 
-  const [forgotState, forgotAction, isPending] = useActionState(
-    forgotPassword,
+  const [resetState, resetAction, isPending] = useActionState(
+    resetPassword,
     initialState
   );
 
   useEffect(() => {
-    if (forgotState.success) {
-      toast.success(forgotState.success);
-    } else if (forgotState.error) {
-      toast.error(forgotState.error);
+    if (resetState.success) {
+      toast.success(resetState.success);
+    } else if (resetState.error) {
+      toast.error(resetState.error);
     }
-  }, [forgotState]);
+  }, [resetState]);
 
-  return { forgotAction, isPending };
+  return { resetAction, isPending };
 };

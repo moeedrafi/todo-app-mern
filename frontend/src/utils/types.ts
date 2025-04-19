@@ -19,6 +19,10 @@ export type AuthContextType = {
     prevState: FormState,
     formData: FormData
   ) => Promise<FormState>;
+  resetPassword: (
+    prevState: FormState,
+    formData: FormData
+  ) => Promise<FormState>;
   logout: () => void;
   checkAuth: () => void;
 };

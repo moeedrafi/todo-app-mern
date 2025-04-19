@@ -209,7 +209,7 @@ const verifyEmail = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "Email Verified Successfully!"));
 });
 
-const resetPassword = asyncHandler(async (req, res) => {
+const forgotPassword = asyncHandler(async (req, res) => {
   const { email } = req.body;
   if (!email) {
     throw new ApiError(400, "Email is required");
@@ -240,6 +240,8 @@ const resetPassword = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, {}, "Reset password email sent Successfully!"));
 });
+
+const resetPassword = asyncHandler(async (req, res) => {});
 
 const changeCurrentPassword = asyncHandler(async (req, res) => {
   const { oldPassword, newPassword } = req.body;
@@ -304,6 +306,7 @@ export {
   logoutUser,
   refreshAccessToken,
   getCurrentUser,
+  forgotPassword,
   resetPassword,
   changeCurrentPassword,
   updateAccountDetails,

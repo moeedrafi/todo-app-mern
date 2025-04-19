@@ -7,6 +7,7 @@ import Register from "@/pages/Register";
 import NotFound from "@/pages/NotFound";
 import EmailVerify from "@/pages/EmailVerify";
 import ResetPassword from "@/pages/ResetPassword";
+import ForgotPassword from "@/pages/ForgotPassword";
 
 import { Navbar } from "@/components/navbar/Navbar";
 
@@ -16,6 +17,7 @@ const App = () => {
     "/register",
     "/email-verify",
     "/reset-password",
+    "/forgot-password",
   ];
   const location = useLocation();
 
@@ -28,6 +30,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/email-verify" element={<EmailVerify />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

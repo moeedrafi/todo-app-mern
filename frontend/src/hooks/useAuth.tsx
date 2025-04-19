@@ -134,6 +134,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const resetPassword = async (
+    _: FormState,
+    formData: FormData
+  ): Promise<FormState> => {
+    const password = formData.get("password");
+    if (!password) {
+      return { error: "Email is Required" };
+    }
+
+    try {
+      const response: AxiosResponse<Response> = await API.post(
+        "/api/v1/users/reset-password",
+        { password }
+      );
+
+      return { success: response.data.message };
+    } catch (error) {
+      const err = error as AxiosError<{ message: string }>;
+      return { error: err?.response?.data?.message || "Something went wrong." };
+    }
+  };
+
   const logout = async () => {};
 
   const checkAuth = async () => {};
@@ -153,6 +175,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     logout,
     checkAuth,
     forgotPassword,
+    resetPassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
