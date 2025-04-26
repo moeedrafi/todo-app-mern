@@ -165,7 +165,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const logout = async () => {};
+  const logout = async (): Promise<FormState> => {
+    try {
+      const response: AxiosResponse<Response> = await API.patch(
+        "/api/v1/users/logout"
+      );
+
+      return { success: response.data.message };
+    } catch (error) {
+      const err = error as AxiosError<{ message: string }>;
+      return { error: err?.response?.data?.message || "Something went wrong." };
+    }
+  };
 
   const checkAuth = async () => {};
 
