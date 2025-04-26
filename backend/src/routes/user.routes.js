@@ -12,6 +12,7 @@ import {
   verifyEmail,
   forgotPassword,
   resetPassword,
+  checkAuth,
 } from "../controllers/user.controller.js";
 import {
   verifyEmailToken,
@@ -27,6 +28,7 @@ router.route("/login").post(loginUser);
 // secure route
 router.route("/logout").post(verifyJWT, logoutUser);
 router.route("/refresh-user").post(refreshAccessToken);
+router.route("/check-auth").get(checkAuth);
 router.route("/verify-email").post(verifyEmailToken, verifyEmail);
 
 router.route("/current-user").get(verifyJWT, getCurrentUser);

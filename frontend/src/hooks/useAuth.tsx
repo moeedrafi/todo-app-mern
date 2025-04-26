@@ -23,7 +23,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [user, setUser] = useState<User | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [isVerified, setIsVerified] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const register = async (
     _: FormState,
@@ -185,15 +185,45 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const checkAuth = async () => {};
+  const checkAuth = async (): Promise<FormState> => {
+    try {
+      const response = await API.get("/api/v1/users/check-auth");
+
+      const {
+        message,
+        data: { user, accessToken },
+      } = response.data;
+
+      setUser(user);
+      setAccessToken(accessToken);
+      setGlobalToken(accessToken);
+      setIsLoggedIn(true);
+
+      return { success: message };
+    } catch (error) {
+      const err = error as AxiosError<{ message: string }>;
+      return { error: err?.response?.data?.message || "Something went wrong." };
+    }
+  };
 
   useEffect(() => {
+    const initializeAuth = async () => {
+      await checkAuth();
+      setIsLoading(false);
+    };
+
+    initializeAuth();
+  }, []);
+
+  useEffect(() => {
+    if (isLoading) return;
+
     if (isLoggedIn && accessToken && user) {
       navigate("/");
     } else {
       navigate("/login");
     }
-  }, [isLoggedIn, accessToken, user, navigate]);
+  }, [isLoggedIn, accessToken, user, navigate, isLoading]);
 
   const value = {
     user,
@@ -202,8 +232,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setUser,
     isLoggedIn,
     setIsLoggedIn,
-    isVerified,
-    setIsVerified,
     register,
     login,
     verifyEmail,

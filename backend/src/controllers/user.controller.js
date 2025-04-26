@@ -185,6 +185,41 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   }
 });
 
+const checkAuth = asyncHandler(async (req, res) => {
+  const incomingAccessToken = req.cookies.accessToken;
+  if (!incomingAccessToken) {
+    throw new ApiError(401, "Unauthorized Access");
+  }
+
+  try {
+    const decodedToken = jwt.verify(
+      incomingAccessToken,
+      process.env.ACCESS_TOKEN_SECRET
+    );
+
+    const user = await User.findById(decodedToken._id);
+    if (!user) {
+      throw new ApiError(401, "invalid refresh token");
+    }
+
+    const options = {
+      httpOnly: true,
+      secure: true,
+    };
+
+    const { accessToken } = await generateAccessAndRefreshToken(user._id);
+
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .json(
+        new ApiResponse(200, { user, accessToken }, "Access token verified")
+      );
+  } catch (error) {
+    throw new ApiError(401, error?.message || "Invalid Refresh Token");
+  }
+});
+
 const getCurrentUser = asyncHandler(async (req, res) => {
   return res
     .status(200)
@@ -322,6 +357,7 @@ export {
   loginUser,
   logoutUser,
   refreshAccessToken,
+  checkAuth,
   getCurrentUser,
   forgotPassword,
   resetPassword,

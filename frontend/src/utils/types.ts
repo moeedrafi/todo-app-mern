@@ -7,11 +7,9 @@ export type AuthContextType = {
   user: User | null;
   isLoggedIn: boolean;
   accessToken: string | null;
-  isVerified: boolean;
   setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsVerified: React.Dispatch<React.SetStateAction<boolean>>;
   login: (prevState: FormState, formData: FormData) => Promise<FormState>;
   register: (prevState: FormState, formData: FormData) => Promise<FormState>;
   verifyEmail: (token: string) => Promise<FormState>;
@@ -23,7 +21,7 @@ export type AuthContextType = {
     prevState: FormState,
     formData: FormData
   ) => Promise<FormState>;
-  logout: () => void;
+  logout: () => Promise<FormState>;
   checkAuth: () => void;
 };
 
