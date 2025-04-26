@@ -138,15 +138,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     _: FormState,
     formData: FormData
   ): Promise<FormState> => {
+    const token = formData.get("token");
     const password = formData.get("password");
-    if (!password) {
-      return { error: "Email is Required" };
+    const confirmPassword = formData.get("confirmPassword");
+
+    if (!token) {
+      return { error: "Token expired!" };
+    }
+    if (!password || !confirmPassword) {
+      return { error: "Missing fields" };
+    }
+    if (password !== confirmPassword) {
+      return { error: "Password do not match" };
     }
 
     try {
-      const response: AxiosResponse<Response> = await API.post(
+      const response: AxiosResponse<Response> = await API.patch(
         "/api/v1/users/reset-password",
-        { password }
+        { password, confirmPassword, token }
       );
 
       return { success: response.data.message };

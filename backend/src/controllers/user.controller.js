@@ -241,7 +241,24 @@ const forgotPassword = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "Reset password email sent Successfully!"));
 });
 
-const resetPassword = asyncHandler(async (req, res) => {});
+const resetPassword = asyncHandler(async (req, res) => {
+  const { password, confirmPassword } = req.body;
+  if (!password || !confirmPassword) {
+    throw new ApiError(400, "Missing fields");
+  }
+
+  const user = await User.findById(req.userId);
+  if (!user) {
+    throw new ApiError(404, "user not found");
+  }
+
+  user.password = password;
+  await user.save();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Password Reset Successfully!"));
+});
 
 const changeCurrentPassword = asyncHandler(async (req, res) => {
   const { oldPassword, newPassword } = req.body;

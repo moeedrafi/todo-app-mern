@@ -13,7 +13,11 @@ import {
   forgotPassword,
   resetPassword,
 } from "../controllers/user.controller.js";
-import { verifyEmailToken, verifyJWT } from "../middleware/auth.middleware.js";
+import {
+  verifyEmailToken,
+  verifyForgotPasswordToken,
+  verifyJWT,
+} from "../middleware/auth.middleware.js";
 
 const router = Router();
 
@@ -28,7 +32,7 @@ router.route("/verify-email").post(verifyEmailToken, verifyEmail);
 router.route("/current-user").get(verifyJWT, getCurrentUser);
 
 router.route("/forgot-password").post(forgotPassword);
-router.route("/reset-password").patch(resetPassword);
+router.route("/reset-password").patch(verifyForgotPasswordToken, resetPassword);
 
 router.route("/change-password").patch(verifyJWT, changeCurrentPassword);
 router.route("/update-account").patch(verifyJWT, updateAccountDetails);
