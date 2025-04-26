@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { useActionState, useEffect } from "react";
 
 import { useAuth } from "@/hooks/useAuth";
@@ -8,6 +8,7 @@ import { initialState } from "@/utils/constants";
 export const useLogin = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [loginState, loginAction, isPending] = useActionState(
     login,
@@ -17,9 +18,9 @@ export const useLogin = () => {
   useEffect(() => {
     if (loginState.success) {
       toast.success(loginState.success);
-      navigate("/");
+      navigate(location.state?.path || "/", { replace: true });
     }
-  }, [navigate, loginState]);
+  }, [navigate, loginState, location]);
 
   return { loginAction, isPending, loginState };
 };

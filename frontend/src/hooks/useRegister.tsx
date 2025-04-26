@@ -1,5 +1,6 @@
+import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { startTransition, useActionState, useEffect } from "react";
 
 import { useAuth } from "@/hooks/useAuth";
@@ -7,10 +8,10 @@ import { initialState } from "@/utils/constants";
 import { RegisterSchemaType } from "@/utils/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "@/utils/schemas/authSchema";
-import toast from "react-hot-toast";
 
 export const useRegister = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { register } = useAuth();
 
   const {
@@ -41,9 +42,9 @@ export const useRegister = () => {
   useEffect(() => {
     if (registerState?.success) {
       toast.success(registerState.success);
-      navigate("/login");
+      navigate(location.state?.path || "/", { replace: true });
     }
-  }, [registerState, navigate]);
+  }, [registerState, navigate, location]);
 
   return {
     formRegister,

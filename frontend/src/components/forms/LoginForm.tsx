@@ -38,7 +38,7 @@ export const LoginForm = () => {
 
         <div className="text-end">
           <Link
-            to="/reset-password"
+            to="/forgot-password"
             className="text-sm hover:underline underline-offset-2"
           >
             Forgot your password?

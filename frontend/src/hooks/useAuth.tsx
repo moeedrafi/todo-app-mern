@@ -12,7 +12,6 @@ import {
   Response,
   User,
 } from "@/utils/types";
-import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -20,11 +19,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const register = async (
     _: FormState,
@@ -246,21 +243,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const initializeAuth = async () => {
       await checkAuth();
-      setIsLoading(false);
     };
 
     initializeAuth();
   }, []);
-
-  useEffect(() => {
-    if (isLoading) return;
-
-    if (isLoggedIn && accessToken && user) {
-      navigate("/");
-    } else {
-      navigate("/login");
-    }
-  }, [isLoggedIn, accessToken, user, navigate, isLoading]);
 
   const value = {
     user,

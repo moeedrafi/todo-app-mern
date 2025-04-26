@@ -10,6 +10,7 @@ import ResetPassword from "@/pages/ResetPassword";
 import ForgotPassword from "@/pages/ForgotPassword";
 
 import { Navbar } from "@/components/navbar/Navbar";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 const App = () => {
   const hideNavbarRoutes = [
@@ -26,12 +27,15 @@ const App = () => {
       {!hideNavbarRoutes.includes(location.pathname) && <Navbar />}
 
       <Routes>
-        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/email-verify" element={<EmailVerify />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Home />} />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
 
