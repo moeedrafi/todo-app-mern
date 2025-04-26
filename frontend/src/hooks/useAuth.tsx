@@ -167,7 +167,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const logout = async (): Promise<FormState> => {
     try {
-      const response: AxiosResponse<Response> = await API.patch(
+      const response: AxiosResponse<Response> = await API.post(
         "/api/v1/users/logout"
       );
 
