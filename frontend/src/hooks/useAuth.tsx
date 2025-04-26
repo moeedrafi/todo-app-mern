@@ -1,5 +1,5 @@
 import { AxiosError, AxiosResponse } from "axios";
-import { useContext, useState, createContext } from "react";
+import { useContext, useState, createContext, useEffect } from "react";
 
 import API from "@/utils/api";
 import { loginSchema, registerSchema } from "@/utils/schemas/authSchema";
@@ -12,12 +12,14 @@ import {
   Response,
   User,
 } from "@/utils/types";
+import { useNavigate } from "react-router";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -171,6 +173,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         "/api/v1/users/logout"
       );
 
+      setUser(null);
+      setAccessToken(null);
+      setGlobalToken(null);
+      setIsLoggedIn(false);
+
       return { success: response.data.message };
     } catch (error) {
       const err = error as AxiosError<{ message: string }>;
@@ -179,6 +186,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const checkAuth = async () => {};
+
+  useEffect(() => {
+    if (isLoggedIn && accessToken && user) {
+      navigate("/");
+    } else {
+      navigate("/login");
+    }
+  }, [isLoggedIn, accessToken, user, navigate]);
 
   const value = {
     user,
