@@ -312,14 +312,14 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 });
 
 const updateAccountDetails = asyncHandler(async (req, res) => {
-  const { fullName, email } = req.body;
-  if (!fullName || !email) {
-    throw new ApiError(400, "Missing fields");
+  const { username } = req.body;
+  if (!username) {
+    throw new ApiError(400, "Missing username");
   }
 
   const user = await User.findByIdAndUpdate(
     req.user?._id,
-    { $set: { fullName, email } },
+    { $set: { username } },
     { new: true }
   ).select("-password -refreshToken");
 
@@ -352,6 +352,36 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, user, "Avatar Image updated successfully"));
 });
 
+const requestEmailChange = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    throw new ApiError(400, "Email is required");
+  }
+
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    throw new ApiError(400, "User not found");
+  }
+
+  const verificationToken = user.generateEmailVerificationToken();
+
+  const mailOptions = {
+    from: process.env.SENDER_EMAIL,
+    to: email,
+    subject: "Verify your new email",
+    html: `
+      <p>Verify your new email by clicking below:</p>
+      <a href="http://localhost:5173/email-verify?token=${verificationToken}">
+        Verify Email
+      </a>
+    `,
+  };
+
+  await transporter.sendMail(mailOptions);
+
+  res.status(200).json(new ApiResponse(200, null, "Verification email sent."));
+});
+
 export {
   registerUser,
   loginUser,
@@ -365,4 +395,5 @@ export {
   updateAccountDetails,
   updateUserAvatar,
   verifyEmail,
+  requestEmailChange,
 };

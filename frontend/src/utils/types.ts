@@ -22,7 +22,11 @@ export type AuthContextType = {
     formData: FormData
   ) => Promise<FormState>;
   logout: () => Promise<FormState>;
-  checkAuth: () => void;
+  checkAuth: () => Promise<FormState>;
+  updateAccount: (
+    prevState: FormState,
+    formData: FormData
+  ) => Promise<FormState>;
 };
 
 export type RegisterResponse = {

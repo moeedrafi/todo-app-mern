@@ -1,7 +1,7 @@
 interface AvatarProps {
   avatar: string;
   fallbackAvatar: string;
-  toggleOpen: () => void;
+  toggleOpen?: () => void;
 }
 
 export const Avatar = ({ toggleOpen, avatar, fallbackAvatar }: AvatarProps) => {

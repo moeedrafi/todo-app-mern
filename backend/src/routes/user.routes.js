@@ -13,6 +13,7 @@ import {
   forgotPassword,
   resetPassword,
   checkAuth,
+  requestEmailChange,
 } from "../controllers/user.controller.js";
 import {
   verifyEmailToken,
@@ -38,6 +39,7 @@ router.route("/reset-password").patch(verifyForgotPasswordToken, resetPassword);
 
 router.route("/change-password").patch(verifyJWT, changeCurrentPassword);
 router.route("/update-account").patch(verifyJWT, updateAccountDetails);
+router.route("/request-email-change").patch(verifyJWT, requestEmailChange);
 router
   .route("/update-avatar")
   .patch(verifyJWT, upload.single("avatar"), updateUserAvatar);

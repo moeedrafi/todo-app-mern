@@ -13,6 +13,7 @@ import {
   User,
 } from "@/utils/types";
 import { useNavigate } from "react-router";
+import toast from "react-hot-toast";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -206,6 +207,42 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const updateAccount = async (
+    _: FormState,
+    formData: FormData
+  ): Promise<FormState> => {
+    const username = formData.get("username") as string;
+    const email = formData.get("email") as string;
+    const avatar = formData.get("avatar") as File;
+
+    console.log(avatar);
+
+    try {
+      if (username && username !== user!.username) {
+        await API.patch("/api/v1/users/update-account", { username });
+      }
+
+      if (avatar && avatar.size > 0) {
+        const avatarFormData = new FormData();
+        avatarFormData.append("avatar", avatar);
+        console.log({ avatarFormData });
+        await API.patch("/api/v1/users/update-avatar", avatarFormData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      }
+
+      if (email && email !== user!.email) {
+        await API.patch("/api/v1/users/request-email-change", { email });
+        toast.custom("Check your inbox to verify your new email.");
+      }
+
+      return { success: "Account updated successfully." };
+    } catch (error) {
+      const err = error as AxiosError<{ message: string }>;
+      return { error: err?.response?.data?.message || "Something went wrong." };
+    }
+  };
+
   useEffect(() => {
     const initializeAuth = async () => {
       await checkAuth();
@@ -239,6 +276,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     checkAuth,
     forgotPassword,
     resetPassword,
+    updateAccount,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
