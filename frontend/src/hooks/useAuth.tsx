@@ -20,13 +20,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
-  const register = async (
-    _: FormState,
-    formData: FormData
-  ): Promise<FormState> => {
+  const register = async (formData: FormData): Promise<FormState> => {
     const rawData = {
       email: formData.get("email"),
       username: formData.get("username"),
@@ -58,10 +56,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const login = async (
-    _: FormState,
-    formData: FormData
-  ): Promise<FormState> => {
+  const login = async (formData: FormData): Promise<FormState> => {
     const rawData = {
       email: formData.get("email"),
       password: formData.get("password"),
@@ -112,10 +107,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const forgotPassword = async (
-    _: FormState,
-    formData: FormData
-  ): Promise<FormState> => {
+  const forgotPassword = async (formData: FormData): Promise<FormState> => {
     const email = formData.get("email");
     if (!email) {
       return { error: "Email is Required" };
@@ -134,10 +126,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const resetPassword = async (
-    _: FormState,
-    formData: FormData
-  ): Promise<FormState> => {
+  const resetPassword = async (formData: FormData): Promise<FormState> => {
     const token = formData.get("token");
     const password = formData.get("password");
     const confirmPassword = formData.get("confirmPassword");
@@ -199,15 +188,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       return { success: message };
     } catch (error) {
+      setUser(null);
+      setAccessToken(null);
+      setIsLoggedIn(false);
       const err = error as AxiosError<{ message: string }>;
       return { error: err?.response?.data?.message || "Something went wrong." };
     }
   };
 
-  const updateAccount = async (
-    _: FormState,
-    formData: FormData
-  ): Promise<FormState> => {
+  const updateAccount = async (formData: FormData): Promise<FormState> => {
     const username = formData.get("username") as string;
     const email = formData.get("email") as string;
     const avatar = formData.get("avatar") as File;
@@ -243,6 +232,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const initializeAuth = async () => {
       await checkAuth();
+      setIsLoading(false);
     };
 
     initializeAuth();
@@ -250,6 +240,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const value = {
     user,
+    isLoading,
     accessToken,
     setAccessToken,
     setUser,
