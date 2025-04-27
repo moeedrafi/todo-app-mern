@@ -11,14 +11,23 @@ export type AuthContextType = {
   setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-  login: (formData: FormData) => Promise<FormState>;
-  register: (formData: FormData) => Promise<FormState>;
+  login: (prevState: FormState, formData: FormData) => Promise<FormState>;
+  register: (prevState: FormState, formData: FormData) => Promise<FormState>;
   verifyEmail: (token: string) => Promise<FormState>;
-  forgotPassword: (formData: FormData) => Promise<FormState>;
-  resetPassword: (formData: FormData) => Promise<FormState>;
+  forgotPassword: (
+    prevState: FormState,
+    formData: FormData
+  ) => Promise<FormState>;
+  resetPassword: (
+    prevState: FormState,
+    formData: FormData
+  ) => Promise<FormState>;
   logout: () => Promise<FormState>;
   checkAuth: () => Promise<FormState>;
-  updateAccount: (formData: FormData) => Promise<FormState>;
+  updateAccount: (
+    prevState: FormState,
+    formData: FormData
+  ) => Promise<FormState>;
 };
 
 export type RegisterResponse = {

@@ -24,7 +24,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
-  const register = async (formData: FormData): Promise<FormState> => {
+  const register = async (
+    _: FormState,
+    formData: FormData
+  ): Promise<FormState> => {
     const rawData = {
       email: formData.get("email"),
       username: formData.get("username"),
@@ -56,7 +59,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const login = async (formData: FormData): Promise<FormState> => {
+  const login = async (
+    _: FormState,
+    formData: FormData
+  ): Promise<FormState> => {
     const rawData = {
       email: formData.get("email"),
       password: formData.get("password"),
@@ -107,7 +113,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const forgotPassword = async (formData: FormData): Promise<FormState> => {
+  const forgotPassword = async (
+    _: FormState,
+    formData: FormData
+  ): Promise<FormState> => {
     const email = formData.get("email");
     if (!email) {
       return { error: "Email is Required" };
@@ -126,7 +135,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const resetPassword = async (formData: FormData): Promise<FormState> => {
+  const resetPassword = async (
+    _: FormState,
+    formData: FormData
+  ): Promise<FormState> => {
     const token = formData.get("token");
     const password = formData.get("password");
     const confirmPassword = formData.get("confirmPassword");
@@ -196,7 +208,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const updateAccount = async (formData: FormData): Promise<FormState> => {
+  const updateAccount = async (
+    _: FormState,
+    formData: FormData
+  ): Promise<FormState> => {
     const username = formData.get("username") as string;
     const email = formData.get("email") as string;
     const avatar = formData.get("avatar") as File;
