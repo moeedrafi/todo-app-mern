@@ -38,8 +38,9 @@ API.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const res = await axios.get(
+        const res = await axios.post(
           `${import.meta.env.VITE_API_URL}/api/v1/users/refresh-user`,
+          {},
           { withCredentials: true }
         );
 
@@ -51,8 +52,7 @@ API.interceptors.response.use(
 
         return API(originalRequest);
       } catch (refreshError) {
-        clearTokens();
-        await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/users/logout`);
+        // clearTokens();
         return Promise.reject(refreshError);
       }
     }
