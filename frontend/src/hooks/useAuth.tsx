@@ -246,8 +246,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const initializeAuth = async () => {
-      await checkAuth();
-      setIsLoading(false);
+      try {
+        await checkAuth();
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     initializeAuth();

@@ -11,6 +11,7 @@ import ForgotPassword from "@/pages/ForgotPassword";
 
 import { Navbar } from "@/components/navbar/Navbar";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { PublicRoute } from "./components/PublicRoute";
 
 const App = () => {
   const hideNavbarRoutes = [
@@ -27,15 +28,18 @@ const App = () => {
       {!hideNavbarRoutes.includes(location.pathname) && <Navbar />}
 
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/email-verify" element={<EmailVerify />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route element={<PublicRoute />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/email-verify" element={<EmailVerify />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+        </Route>
 
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Home />} />
         </Route>
+
         <Route path="*" element={<NotFound />} />
       </Routes>
 
