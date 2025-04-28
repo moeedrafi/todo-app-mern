@@ -30,6 +30,15 @@ export type AuthContextType = {
   ) => Promise<FormState>;
 };
 
+export type TodoContextType = {
+  todos: Todo[];
+  addTodo: (prevState: TodoResult, formData: FormData) => Promise<TodoResult>;
+  deleteTodo: (
+    prevState: TodoResult,
+    formData: FormData
+  ) => Promise<TodoResult>;
+};
+
 export type RegisterResponse = {
   data: User;
   message: string;
@@ -67,6 +76,11 @@ export type Todo = {
 };
 
 export type FormState = {
+  success?: string;
+  error?: string;
+};
+
+export type TodoResult = {
   success?: string;
   error?: string;
 };
