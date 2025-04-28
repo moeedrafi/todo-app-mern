@@ -1,6 +1,6 @@
 import API from "@/utils/api";
 import { AxiosError } from "axios";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 import { Priority, Todo, TodoContextType, TodoResult } from "@/utils/types";
 
@@ -10,6 +10,7 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const addTodo = async (
     prevState: TodoResult,
@@ -23,8 +24,19 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
 
     try {
       const response = await API.post("/api/v1/todos", { desc, priority });
+      setTodos((prev) => [response.data.data, ...prev]);
 
-      setTodos(response.data.data);
+      return { success: response.data.message };
+    } catch (error) {
+      const err = error as AxiosError<{ message: string }>;
+      return { error: err?.response?.data?.message || "Something went wrong." };
+    }
+  };
+
+  const getTodos = async (): Promise<TodoResult> => {
+    try {
+      const response = await API.get("/api/v1/todos");
+      setTodos([...response.data.data]);
 
       return { success: response.data.message };
     } catch (error) {
@@ -52,7 +64,32 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const value = { todos, addTodo, deleteTodo };
+  const updateTodoStatus = async (id: string): Promise<TodoResult> => {
+    try {
+      const response = await API.patch(`/api/v1/todos/${id}/status`);
+
+      return { success: response.data.message };
+    } catch (error) {
+      const err = error as AxiosError<{ message: string }>;
+      return { error: err?.response?.data?.message || "Something went wrong." };
+    }
+  };
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        await getTodos();
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTodos();
+  }, []);
+
+  const value = { todos, addTodo, deleteTodo, updateTodoStatus, isLoading };
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
 };

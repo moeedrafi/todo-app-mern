@@ -32,11 +32,13 @@ export type AuthContextType = {
 
 export type TodoContextType = {
   todos: Todo[];
+  isLoading: boolean;
   addTodo: (prevState: TodoResult, formData: FormData) => Promise<TodoResult>;
   deleteTodo: (
     prevState: TodoResult,
     formData: FormData
   ) => Promise<TodoResult>;
+  updateTodoStatus: (id: string) => Promise<TodoResult>;
 };
 
 export type RegisterResponse = {
