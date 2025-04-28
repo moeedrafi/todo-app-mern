@@ -63,7 +63,9 @@ const updateTodoStatus = asyncHandler(async (req, res) => {
   todo.isCompleted = !todo.isCompleted;
   const updatedTodo = await todo.save();
 
-  res.status(200).json(200, updatedTodo, "Updated Successfully");
+  return res
+    .status(200)
+    .json(new ApiResponse(200, updatedTodo, "Updated Successfully"));
 });
 
 export { createTodo, deleteTodo, getTodos, updateTodoStatus };
