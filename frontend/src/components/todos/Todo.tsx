@@ -24,9 +24,23 @@ export const Todo = ({ todo }: { todo: TodoTypes }) => {
           />
           <p className="text-lg">{todo.desc}</p>
         </div>
-        <button className="px-2 py-1.5 rounded-lg text-white bg-red-500 hover:bg-red-400 cursor-pointer">
-          Delete
-        </button>
+
+        <div className="flex gap-3">
+          <button
+            className={`px-2 py-1.5 rounded-lg text-white cursor-pointer ${
+              todo.priority === "High"
+                ? "bg-red-700"
+                : todo.priority === "Medium"
+                ? "bg-blue-500"
+                : "bg-green-500"
+            }`}
+          >
+            {todo.priority}
+          </button>
+          <button className="px-2 py-1.5 rounded-lg text-white bg-red-500 hover:bg-red-400 cursor-pointer">
+            Delete
+          </button>
+        </div>
       </div>
     </>
   );
