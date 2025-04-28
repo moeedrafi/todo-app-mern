@@ -35,8 +35,14 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const getTodos = async (): Promise<TodoResult> => {
     try {
+      const storedTodos = localStorage.getItem("todos");
+      if (storedTodos) {
+        setTodos(JSON.parse(storedTodos));
+      }
+
       const response = await API.get("/api/v1/todos");
       setTodos([...response.data.data]);
+      localStorage.setItem("todos", JSON.stringify(response.data.data));
 
       return { success: response.data.message };
     } catch (error) {
@@ -68,6 +74,10 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       const response = await API.patch(`/api/v1/todos/${id}/status`);
 
+      setTodos((prev) =>
+        prev.map((todo) => (todo._id === id ? response.data.data : todo))
+      );
+
       return { success: response.data.message };
     } catch (error) {
       const err = error as AxiosError<{ message: string }>;
@@ -77,6 +87,7 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const fetchTodos = async () => {
+      setIsLoading(true);
       try {
         await getTodos();
       } catch (error) {

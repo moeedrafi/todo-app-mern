@@ -41,43 +41,15 @@ const deleteTodo = asyncHandler(async (req, res) => {
 });
 
 const getTodos = asyncHandler(async (req, res) => {
-  const { page = 1, limit = 10 } = req.query;
+  const todos = await Todo.find({ user: req.user._id }).sort({ createdAt: -1 });
 
-  const pageNumber = parseInt(page, 10);
-  const pageSize = parseInt(limit, 10);
-  if (pageNumber < 1 || pageSize < 1) {
-    throw new ApiError(400, "Page and limit must be positive numbers");
-  }
-
-  const totalTodos = await Todo.countDocuments({ user: req.user._id });
-  const totalPages = Math.ceil(totalTodos / pageSize);
-
-  const todos = await Todo.find({ user: req.user._id })
-    .sort({ createdAt: -1 })
-    .skip((pageNumber - 1) * pageSize)
-    .limit(pageSize);
-
-  if (!todos.length) {
+  if (!todos || !todos.length === 0) {
     throw new ApiError(404, "No todos found");
   }
 
-  return res.status(200).json(
-    new ApiResponse(
-      200,
-      {
-        todos,
-        pagination: {
-          totalTodos,
-          totalPages,
-          currentPage: pageNumber,
-          pageSize,
-          hasPrevPage: pageNumber > 1,
-          hasNextPage: pageNumber < totalPages,
-        },
-      },
-      "Todo fetched Successfully"
-    )
-  );
+  return res
+    .status(200)
+    .json(new ApiResponse(200, todos, "Todo fetched Successfully"));
 });
 
 const updateTodoStatus = asyncHandler(async (req, res) => {
@@ -89,9 +61,9 @@ const updateTodoStatus = asyncHandler(async (req, res) => {
   }
 
   todo.isCompleted = !todo.isCompleted;
-  await todo.save();
+  const updatedTodo = await todo.save();
 
-  res.status(200).json(200, todo, "Updated Successfully");
+  res.status(200).json(200, updatedTodo, "Updated Successfully");
 });
 
 export { createTodo, deleteTodo, getTodos, updateTodoStatus };
