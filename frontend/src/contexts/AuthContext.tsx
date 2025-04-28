@@ -5,14 +5,22 @@ import API from "@/utils/api";
 import { loginSchema, registerSchema } from "@/utils/schemas/authSchema";
 import { setAccessToken as setGlobalToken } from "@/utils/tokenManager";
 import {
-  AuthContextType,
   FormState,
   LoginResponse,
   RegisterResponse,
   Response,
   User,
-} from "@/utils/types";
+} from "@/utils/types/types";
 import toast from "react-hot-toast";
+
+type AuthContextType = {
+  user: User | null;
+  isLoading: boolean;
+  isLoggedIn: boolean;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -22,42 +30,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-
-  const register = async (
-    _: FormState,
-    formData: FormData
-  ): Promise<FormState> => {
-    const rawData = {
-      email: formData.get("email"),
-      username: formData.get("username"),
-      password: formData.get("password"),
-    };
-
-    const result = registerSchema.safeParse(rawData);
-    if (!result.success) {
-      return { error: result.error.message };
-    }
-
-    const { email, password, username } = result.data;
-
-    try {
-      const response: AxiosResponse<RegisterResponse> = await API.post(
-        "/api/v1/users/register",
-        { email, username, password }
-      );
-
-      const { message, data } = response.data;
-
-      setUser(data);
-      setIsLoggedIn(true);
-
-      return { success: message };
-    } catch (error) {
-      const err = error as AxiosError<{ message: string }>;
-      return { error: err?.response?.data?.message || "Something went wrong." };
-    }
-  };
 
   const login = async (
     _: FormState,
@@ -261,19 +233,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const value = {
     user,
     isLoading,
-    accessToken,
-    setAccessToken,
-    setUser,
     isLoggedIn,
+    setUser,
     setIsLoggedIn,
-    register,
-    login,
-    verifyEmail,
-    logout,
-    checkAuth,
-    forgotPassword,
-    resetPassword,
-    updateAccount,
+    setIsLoading,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -3,9 +3,9 @@ import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router";
 import { startTransition, useActionState, useEffect } from "react";
 
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/contexts/useAuth";
 import { initialState } from "@/utils/constants";
-import { RegisterSchemaType } from "@/utils/types";
+import { RegisterSchemaType } from "@/utils/types/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "@/utils/schemas/authSchema";
 

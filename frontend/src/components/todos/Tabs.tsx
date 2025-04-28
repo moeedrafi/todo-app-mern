@@ -1,4 +1,4 @@
-import { TabsType } from "@/utils/types";
+import { TabsType } from "@/utils/types/types";
 
 interface TabsProps {
   isActiveTab: TabsType;

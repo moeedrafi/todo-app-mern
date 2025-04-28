@@ -3,33 +3,6 @@ import { loginSchema, registerSchema } from "@/utils/schemas/authSchema";
 
 export type TabsType = "All" | "Completed" | "Pending";
 
-export type AuthContextType = {
-  user: User | null;
-  isLoading: boolean;
-  isLoggedIn: boolean;
-  accessToken: string | null;
-  setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
-  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-  login: (prevState: FormState, formData: FormData) => Promise<FormState>;
-  register: (prevState: FormState, formData: FormData) => Promise<FormState>;
-  verifyEmail: (token: string) => Promise<FormState>;
-  forgotPassword: (
-    prevState: FormState,
-    formData: FormData
-  ) => Promise<FormState>;
-  resetPassword: (
-    prevState: FormState,
-    formData: FormData
-  ) => Promise<FormState>;
-  logout: () => Promise<FormState>;
-  checkAuth: () => Promise<FormState>;
-  updateAccount: (
-    prevState: FormState,
-    formData: FormData
-  ) => Promise<FormState>;
-};
-
 export type TodoContextType = {
   todos: Todo[];
   isLoading: boolean;
@@ -49,7 +22,6 @@ export type RegisterResponse = {
 export type LoginResponse = {
   data: {
     user: User;
-    accessToken: string;
   };
   message: string;
 };
@@ -83,6 +55,14 @@ export type Todo = {
 export type FormState = {
   success?: string;
   error?: string;
+};
+
+export type LoginFormState = FormState & {
+  user?: User;
+};
+
+export type RegisterFormState = FormState & {
+  user?: User;
 };
 
 export type TodoResult = {

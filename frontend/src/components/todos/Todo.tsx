@@ -1,5 +1,5 @@
-import { useTodo } from "@/hooks/useTodo";
-import { Todo as TodoTypes } from "@/utils/types";
+import { useTodo } from "@/contexts/useTodo";
+import { Todo as TodoTypes } from "@/utils/types/types";
 
 export const Todo = ({ todo }: { todo: TodoTypes }) => {
   const { updateTodoStatus } = useTodo();

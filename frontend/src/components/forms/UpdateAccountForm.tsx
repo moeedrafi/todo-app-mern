@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/contexts/useAuth";
 import { Card } from "@/components/Card";
 import { useUpdateAccount } from "@/hooks/useUpdateAccount";
 

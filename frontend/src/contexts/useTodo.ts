@@ -2,7 +2,12 @@ import API from "@/utils/api";
 import { AxiosError } from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 
-import { Priority, Todo, TodoContextType, TodoResult } from "@/utils/types";
+import {
+  Priority,
+  Todo,
+  TodoContextType,
+  TodoResult,
+} from "@/utils/types/types";
 
 const TodoContext = createContext<TodoContextType | undefined>(undefined);
 

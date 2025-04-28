@@ -1,7 +1,7 @@
 import { useActionState, useEffect } from "react";
 import toast from "react-hot-toast";
 
-import { useTodo } from "@/hooks/useTodo";
+import { useTodo } from "@/contexts/useTodo";
 import { initialState } from "@/utils/constants";
 
 export const useAddTodo = () => {

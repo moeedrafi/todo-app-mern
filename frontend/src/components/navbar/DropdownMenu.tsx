@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/contexts/useAuth";
 import { UpdateAccountForm } from "@/components/forms/UpdateAccountForm";
 
 export const DropdownMenu = () => {

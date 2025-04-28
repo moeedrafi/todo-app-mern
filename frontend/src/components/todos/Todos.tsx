@@ -1,5 +1,5 @@
-import { TabsType } from "@/utils/types";
-import { useTodo } from "@/hooks/useTodo";
+import { TabsType } from "@/utils/types/types";
+import { useTodo } from "@/contexts/useTodo";
 import { Todo } from "@/components/todos/Todo";
 
 interface TodosProps {

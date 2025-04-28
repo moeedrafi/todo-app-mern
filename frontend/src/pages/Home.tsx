@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { Tabs } from "@/components/todos/Tabs";
-import { TabsType } from "@/utils/types";
+import { TabsType } from "@/utils/types/types";
 import { Todos } from "@/components/todos/Todos";
 import { SearchInput } from "@/components/todos/SearchInput";
 
