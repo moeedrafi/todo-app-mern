@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/Card";
+import { Card } from "@/components/Card";
 import { useRegister } from "@/hooks/useRegister";
 
 export const RegisterForm = () => {

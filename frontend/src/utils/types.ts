@@ -57,6 +57,15 @@ export type User = {
   updatedAt: string;
 };
 
+export type Todo = {
+  _id: string;
+  desc: string;
+  priority: "High" | "Medium" | "Low";
+  isCompleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type FormState = {
   success?: string;
   error?: string;

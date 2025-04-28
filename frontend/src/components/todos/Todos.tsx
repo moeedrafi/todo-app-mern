@@ -1,5 +1,5 @@
 import { TabsType } from "@/utils/types";
-import { Todo } from "@/components/Todo";
+import { Todo } from "@/components/todos/Todo";
 
 interface TodosProps {
   isActiveTab: TabsType;

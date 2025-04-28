@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { useAuth } from "@/hooks/useAuth";
-import { Card } from "@/components/ui/Card";
+import { Card } from "@/components/Card";
 import { useUpdateAccount } from "@/hooks/useUpdateAccount";
 
 export const UpdateAccountForm = () => {

@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-import { Tabs } from "@/components/Tabs";
+import { Tabs } from "@/components/todos/Tabs";
 import { TabsType } from "@/utils/types";
-import { Todos } from "@/components/Todos";
-import { SearchInput } from "@/components/SearchInput";
+import { Todos } from "@/components/todos/Todos";
+import { SearchInput } from "@/components/todos/SearchInput";
 
 const Home = () => {
   const [isActiveTab, setIsActiveTab] = useState<TabsType>("All");

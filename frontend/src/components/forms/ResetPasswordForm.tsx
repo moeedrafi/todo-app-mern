@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router";
 
-import { Card } from "@/components/ui/Card";
+import { Card } from "@/components/Card";
 import { useResetPassword } from "@/hooks/useResetPassword";
 
 export const ResetPasswordForm = () => {

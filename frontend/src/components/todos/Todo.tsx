@@ -1,5 +1,5 @@
-import { TabsType } from "@/utils/types";
 import { useState } from "react";
+import { TabsType } from "@/utils/types";
 
 type TodoProps = {
   id: string;
@@ -7,7 +7,7 @@ type TodoProps = {
   completed: boolean;
 };
 
-const dummyTodos: Todo[] = [
+const dummyTodos: TodoProps[] = [
   {
     id: "1",
     title: "Go Outside",

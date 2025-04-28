@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 
-import { Card } from "@/components/ui/Card";
+import { Card } from "@/components/Card";
 import { useLogin } from "@/hooks/useLogin";
 
 export const LoginForm = () => {

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 
 import { useAuth } from "@/hooks/useAuth";
-import { Card } from "@/components/ui/Card";
+import { Card } from "@/components/Card";
 
 const EmailVerify = () => {
   const { verifyEmail } = useAuth();
