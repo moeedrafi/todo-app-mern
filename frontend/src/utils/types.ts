@@ -66,10 +66,13 @@ export type User = {
   updatedAt: string;
 };
 
+export type Priority = "High" | "Medium" | "Low";
+
 export type Todo = {
   _id: string;
   desc: string;
-  priority: "High" | "Medium" | "Low";
+  user: string;
+  priority: Priority;
   isCompleted: boolean;
   createdAt: string;
   updatedAt: string;

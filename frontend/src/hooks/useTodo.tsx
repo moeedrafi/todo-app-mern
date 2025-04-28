@@ -1,7 +1,8 @@
+import API from "@/utils/api";
 import { AxiosError } from "axios";
 import { createContext, useContext, useState } from "react";
 
-import { Todo, TodoContextType, TodoResult } from "@/utils/types";
+import { Priority, Todo, TodoContextType, TodoResult } from "@/utils/types";
 
 const TodoContext = createContext<TodoContextType | undefined>(undefined);
 
@@ -14,15 +15,18 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
     prevState: TodoResult,
     formData: FormData
   ): Promise<TodoResult> => {
-    const desc = formData.get("desc");
-    const priority = formData.get("priority");
-
+    const desc = formData.get("desc") as string;
+    const priority = formData.get("priority") as Priority;
     if (!desc || !priority) {
       return { error: "All Fields are required" };
     }
 
     try {
-      return { success: "" };
+      const response = await API.post("/api/v1/todos", { desc, priority });
+
+      setTodos(response.data.data);
+
+      return { success: response.data.message };
     } catch (error) {
       const err = error as AxiosError<{ message: string }>;
       return { error: err?.response?.data?.message || "Something went wrong." };

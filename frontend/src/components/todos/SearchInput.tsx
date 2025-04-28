@@ -1,6 +1,13 @@
+import { useAddTodo } from "@/hooks/useAddTodo";
+
 export const SearchInput = () => {
+  const { addTodoAction, isPending } = useAddTodo();
+
   return (
-    <form className="flex items-center justify-center gap-4 mb-10">
+    <form
+      action={addTodoAction}
+      className="flex items-center justify-center gap-4 mb-10"
+    >
       <label htmlFor="desc" className="sr-only">
         Search Todos
       </label>
@@ -17,7 +24,13 @@ export const SearchInput = () => {
         <option value="Medium">Medium</option>
         <option value="Low">Low</option>
       </select>
-      <button className="px-3 py-2 bg-black rounded-lg text-white">Add</button>
+      <button
+        type="submit"
+        disabled={isPending}
+        className="px-3 py-2 bg-black rounded-lg hover:bg-gray-800 text-white cursor-pointer"
+      >
+        Add
+      </button>
     </form>
   );
 };
