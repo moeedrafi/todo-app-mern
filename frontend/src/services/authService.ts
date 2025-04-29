@@ -74,7 +74,7 @@ const loginService = async (formData: FormData): Promise<FormState> => {
   try {
     const response: AxiosResponse<LoginResponse> = await API.post(
       "/api/v1/users/login",
-      { validEmail, validPassword }
+      { email: validEmail, password: validPassword }
     );
 
     return { success: response.data.message, user: response.data.data };
