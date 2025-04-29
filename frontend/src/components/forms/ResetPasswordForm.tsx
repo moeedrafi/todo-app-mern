@@ -7,7 +7,7 @@ export const ResetPasswordForm = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token") as string;
 
-  const { isPending, resetAction } = useResetPassword();
+  const { isPending, action } = useResetPassword();
 
   return (
     <Card header="Reset Password" subHeading="Enter your new password">
@@ -15,7 +15,7 @@ export const ResetPasswordForm = () => {
         className="space-y-6"
         action={(formData) => {
           formData.append("token", token);
-          resetAction(formData);
+          action(formData);
         }}
       >
         <div className="flex flex-col gap-2">

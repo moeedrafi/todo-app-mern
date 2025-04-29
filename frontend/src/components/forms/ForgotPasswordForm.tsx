@@ -2,14 +2,14 @@ import { Card } from "@/components/Card";
 import { useForgotPassword } from "@/hooks/useForgotPassword";
 
 export const ForgotPasswordForm = () => {
-  const { forgotAction, isPending } = useForgotPassword();
+  const { action, isPending } = useForgotPassword();
 
   return (
     <Card
       header="Forgot Password"
       subHeading="Enter your email to send reset link"
     >
-      <form className="space-y-6" action={forgotAction}>
+      <form className="space-y-6" action={action}>
         <div className="flex flex-col gap-2">
           <label htmlFor="email">Email</label>
           <input

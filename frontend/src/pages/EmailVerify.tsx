@@ -1,15 +1,15 @@
+import { useEffect } from "react";
 import toast from "react-hot-toast";
-import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 
-import { useAuth } from "@/contexts/useAuth";
 import { Card } from "@/components/Card";
+import { useAuth } from "@/contexts/AuthContext";
+import { verifyEmail } from "@/services/authService";
 
 const EmailVerify = () => {
-  const { verifyEmail } = useAuth();
   const [searchParams] = useSearchParams();
+  const { isLoading, setIsLoading } = useAuth();
   const token = searchParams.get("token") as string;
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (token) {
@@ -26,9 +26,10 @@ const EmailVerify = () => {
         .catch((error) => {
           setIsLoading(false);
           toast.error(error || "Something went wrong.");
-        });
+        })
+        .finally(() => setIsLoading(false));
     }
-  }, [token, verifyEmail]);
+  }, [token, setIsLoading]);
 
   return (
     <div className="h-screen w-screen flex justify-center items-center bg-gradient-to-br from-sky-400 to-blue-600">

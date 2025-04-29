@@ -4,7 +4,7 @@ import { Card } from "@/components/Card";
 import { useLogin } from "@/hooks/useLogin";
 
 export const LoginForm = () => {
-  const { isPending, loginAction, loginState } = useLogin();
+  const { isPending, action } = useLogin();
 
   return (
     <Card
@@ -13,7 +13,7 @@ export const LoginForm = () => {
       to="/register"
       label="Don't have an account?"
     >
-      <form action={loginAction} className="space-y-6">
+      <form action={action} className="space-y-6">
         <div className="flex flex-col gap-2">
           <label htmlFor="email">Email</label>
           <input
@@ -44,17 +44,6 @@ export const LoginForm = () => {
             Forgot your password?
           </Link>
         </div>
-
-        {loginState.error && (
-          <p
-            role="alert"
-            aria-live="assertive"
-            className="p-2 rounded-lg bg-red-200 text-red-500"
-            tabIndex={-1}
-          >
-            {loginState.error}
-          </p>
-        )}
 
         <button
           type="submit"

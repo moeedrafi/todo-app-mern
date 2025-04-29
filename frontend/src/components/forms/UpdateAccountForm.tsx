@@ -1,20 +1,19 @@
 import { Link } from "react-router";
-import { useAuth } from "@/contexts/useAuth";
+
 import { Card } from "@/components/Card";
+import { useAuth } from "@/contexts/AuthContext";
 import { useUpdateAccount } from "@/hooks/useUpdateAccount";
 
 export const UpdateAccountForm = () => {
   const { user } = useAuth();
-  const { isPending, updateAction } = useUpdateAccount();
+  const { isPending, action } = useUpdateAccount(user);
 
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
 
   return (
     <div className="absolute top-0 left-0 w-full h-screen flex items-center justify-center z-20 bg-black/75">
       <Card header="Update Account" subHeading="update your account">
-        <form action={updateAction} className="space-y-8">
+        <form action={action} className="space-y-8">
           <div className="flex flex-col gap-2">
             <label htmlFor="username">Username</label>
             <input

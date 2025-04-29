@@ -2,25 +2,24 @@ import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router";
 import { useActionState, useEffect } from "react";
 
-import { useAuth } from "@/contexts/useAuth";
 import { initialState } from "@/utils/constants";
+import { registerAction } from "@/services/authService";
 
-export const useLogin = () => {
-  const { login } = useAuth();
+export const useRegister = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [loginState, loginAction, isPending] = useActionState(
-    login,
+  const [state, action, isPending] = useActionState(
+    registerAction,
     initialState
   );
 
   useEffect(() => {
-    if (loginState.success) {
-      toast.success(loginState.success);
+    if (state.success) {
+      toast.success(state.success);
       navigate(location.state?.path || "/", { replace: true });
     }
-  }, [navigate, loginState, location]);
+  }, [state, navigate, location]);
 
-  return { loginAction, isPending, loginState };
+  return { isPending, action };
 };

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router";
 
-import { useAuth } from "@/contexts/useAuth";
+import { useAuth } from "@/contexts/AuthContext";
 import { Avatar } from "@/components/navbar/Avatar";
 import { DropdownMenu } from "@/components/navbar/DropdownMenu";
 

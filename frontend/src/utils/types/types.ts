@@ -20,9 +20,7 @@ export type RegisterResponse = {
 };
 
 export type LoginResponse = {
-  data: {
-    user: User;
-  };
+  data: User;
   message: string;
 };
 
@@ -55,13 +53,6 @@ export type Todo = {
 export type FormState = {
   success?: string;
   error?: string;
-};
-
-export type LoginFormState = FormState & {
-  user?: User;
-};
-
-export type RegisterFormState = FormState & {
   user?: User;
 };
 
