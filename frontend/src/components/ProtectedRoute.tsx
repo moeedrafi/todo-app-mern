@@ -1,9 +1,12 @@
-import { useAuth } from "@/contexts/useAuth";
 import { Navigate, Outlet, useLocation } from "react-router";
+
+import { useAuth } from "@/contexts/AuthContext";
+import { getAccessToken } from "@/utils/tokenManager";
 
 export const ProtectedRoute = () => {
   const location = useLocation();
-  const { accessToken, isLoggedIn, user, isLoading } = useAuth();
+  const accessToken = getAccessToken();
+  const { isLoggedIn, user, isLoading } = useAuth();
 
   if (isLoading) return <p>LOADING....</p>;
 

@@ -3,17 +3,6 @@ import { loginSchema, registerSchema } from "@/utils/schemas/authSchema";
 
 export type TabsType = "All" | "Completed" | "Pending";
 
-export type TodoContextType = {
-  todos: Todo[];
-  isLoading: boolean;
-  addTodo: (prevState: TodoResult, formData: FormData) => Promise<TodoResult>;
-  deleteTodo: (
-    prevState: TodoResult,
-    formData: FormData
-  ) => Promise<TodoResult>;
-  updateTodoStatus: (id: string) => Promise<TodoResult>;
-};
-
 export type RegisterResponse = {
   data: User;
   message: string;
@@ -54,6 +43,8 @@ export type FormState = {
   success?: string;
   error?: string;
   user?: User;
+  todo?: Todo;
+  todos?: Todo[];
 };
 
 export type TodoResult = {

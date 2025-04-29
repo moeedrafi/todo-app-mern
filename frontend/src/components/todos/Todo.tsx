@@ -1,12 +1,21 @@
-import { useTodo } from "@/contexts/useTodo";
+import { useTodo } from "@/contexts/TodoContext";
+import { updateTodoStatusService } from "@/services/todoService";
 import { Todo as TodoTypes } from "@/utils/types/types";
 
 export const Todo = ({ todo }: { todo: TodoTypes }) => {
-  const { updateTodoStatus } = useTodo();
+  const { setTodos } = useTodo();
 
-  const handleChange = async () => {
+  const handleChange = async (id: string) => {
     try {
-      await updateTodoStatus(todo._id);
+      const isUpdated = await updateTodoStatusService(todo._id);
+
+      if (isUpdated.success && isUpdated.todo) {
+        const updatedTodo = isUpdated.todo;
+
+        setTodos((prev) =>
+          prev.map((todo) => (todo._id === id ? updatedTodo : todo))
+        );
+      }
     } catch (error) {
       console.error("Error updating todo:", error);
     }
@@ -20,7 +29,7 @@ export const Todo = ({ todo }: { todo: TodoTypes }) => {
             type="checkbox"
             checked={todo.isCompleted}
             className="w-5 h-5"
-            onChange={handleChange}
+            onChange={() => handleChange(todo._id)}
           />
           <p className="text-lg">{todo.desc}</p>
         </div>

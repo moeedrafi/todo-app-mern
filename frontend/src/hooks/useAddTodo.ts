@@ -1,23 +1,26 @@
-import { useActionState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { useActionState, useEffect } from "react";
 
-import { useTodo } from "@/contexts/useTodo";
 import { initialState } from "@/utils/constants";
+import { useTodo } from "@/contexts/TodoContext";
+import { addTodoService } from "@/services/todoService";
 
 export const useAddTodo = () => {
-  const { addTodo } = useTodo();
-  const [addTodoState, addTodoAction, isPending] = useActionState(
-    addTodo,
+  const { setTodos } = useTodo();
+  const [state, action, isPending] = useActionState(
+    addTodoService,
     initialState
   );
 
   useEffect(() => {
-    if (addTodoState.success) {
-      toast.success(addTodoState.success);
-    } else if (addTodoState.error) {
-      toast.error(addTodoState.error);
+    if (state.success && state.todo) {
+      const newTodo = state.todo;
+      setTodos((prev) => [newTodo, ...prev]);
+      toast.success(state.success);
+    } else if (state.error) {
+      toast.error(state.error);
     }
-  }, [addTodoState]);
+  }, [state, setTodos]);
 
-  return { addTodoAction, isPending };
+  return { action, isPending };
 };
